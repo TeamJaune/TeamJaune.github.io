@@ -78,10 +78,6 @@ img.red {
     padding: 10px;
 }
 
-img.red:hover {
-    border: 5px solid var(--text);
-}
-
 .remove {
     opacity: 0;
 }
