@@ -1,0 +1,68 @@
+body {
+    background-color: var(--blue);
+    animation: bodyApear 1s ease-in-out;
+}
+
+@keyframes bodyApear {
+    0% {
+        background-color: var(--yellow);
+    }
+    100% {
+        background-color: var(--blue);
+    }
+}
+
+div.bubble {
+    position: absolute;
+    display: block;
+    background-color: var(--yellow);
+    border-radius: 51% 49% 48% 52% / 62% 44% 56% 38%;
+    height: 25vh;
+    aspect-ratio: 1/1;
+    transition-duration: 2.5s;
+}
+
+div.bubble:hover {
+    transform: scale(1.5)!important;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+div.bubble:hover span.filter {
+    opacity: 0!important;
+}
+
+div.bubble img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 51% 49% 48% 52% / 62% 44% 56% 38%;
+    object-fit: cover;
+    transition-duration: 2.5s;
+}
+
+div.bubble span.filter {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    background: #318CFE;
+    border-radius: 51% 49% 48% 52% / 62% 44% 56% 38%;
+    box-shadow: -20px 30px 16px #1B6CFB, -40px 60px 32px #1B6CFB, inset -6px 6px 10px #1B6CFB, inset 2px 6px 10px #1a74e5, inset 20px -20px 22px white, inset 40px -40px 44px #a8ceff;
+    opacity: 0.3;
+    transition-duration: 2.5s;
+}
+
+div.bubble span.reflection {
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background: #E6FDFB;
+    border-radius: 44% 56% 46% 54% / 36% 50% 50% 64%;
+    left: 130px;
+    top: 40px;
+    box-shadow: 16px 40px 0 -10px white;
+    opacity: 0.8;
+    transition-duration: 10s;
+}

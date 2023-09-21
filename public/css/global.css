@@ -12,3 +12,8 @@
     font-size: 17px;
     color: var(--text);
 }
+
+html,
+body {
+    overflow-y: hidden;
+}
