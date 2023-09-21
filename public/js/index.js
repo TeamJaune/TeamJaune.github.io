@@ -97,8 +97,12 @@ if (canvas.getContext) {
         ctx.lineTo(0, 0);
         ctx.lineTo(0, canvas.height);
 
+        // Drawing the wave
         for (let x = 0, slopeAdd = 0; x <= canvas.width; x++, slopeAdd += slope) {
+            // Calculating the y coordinate of the wave
             let y = -amplitude * Math.sin((Math.PI / period) * (degree + x));
+
+            // make the wave animation smooth if the wave is moving
             if (waveDirection == "yellow") {
                 ctx.lineTo(x, y + canvas.height - slopeAdd + waveAnimationOffset);
             } else if (waveDirection == "red") {
@@ -113,8 +117,12 @@ if (canvas.getContext) {
 
         ctx.beginPath();
 
+        // Drawing the wave points
         for (let x = 0, slopeAdd = 0; x <= canvas.width; x++, slopeAdd += slope) {
+            // Calculating the y coordinate of the wave
             let y = -amplitude * Math.sin((Math.PI / period) * (degree + x));
+
+            // make the wave animation smooth if the wave is moving
             if (waveDirection == "yellow") {
                 ctx.rect(x, y + canvas.height - slopeAdd + waveAnimationOffset, 10, 10);
             } else if (waveDirection == "red") {
