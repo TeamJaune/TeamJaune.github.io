@@ -53,7 +53,7 @@ img.yellow {
     transition-duration: 0.3s;
     cursor: pointer;
     cursor: pointer;
-    animation: versusAnimation 1s alternate-reverse infinite;
+    animation: versusAnimation 1s alternate infinite;
     border: 0px solid transparent;
     border-radius: 50%;
     padding: 10px;
@@ -74,7 +74,6 @@ img.red {
     transition-duration: 0.3s;
     cursor: pointer;
     animation: versusAnimation 1s alternate-reverse infinite;
-    animation-delay: 0.5s;
     border-radius: 50%;
     padding: 10px;
 }
@@ -105,6 +104,10 @@ img.red:hover {
 
 .flip {
     animation: versusAnimationFliped 1s alternate-reverse infinite!important;
+}
+
+.red.flip {
+    animation: versusAnimationFliped 1s alternate infinite!important;
 }
 
 @media screen and (max-width: 1000px) {
