@@ -33,7 +33,7 @@ function debounce(func, timeout = 300){
 }
 
 yellowTeam.addEventListener("click", () => {
-    commingFrom = "yellow";
+    commingFrom = swap ? "yellow" : "red";
     redTeam.classList.add("remove");
     versus.classList.add("remove");
     yellowTeam.classList.add("activeYellow");
