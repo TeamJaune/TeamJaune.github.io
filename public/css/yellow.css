@@ -69,8 +69,8 @@ div.bubble span.reflection {
     width: 40px;
     background: #E6FDFB;
     border-radius: 44% 56% 46% 54% / 36% 50% 50% 64%;
-    left: 130px;
-    top: 40px;
+    left: 60%;
+    top: 15%;
     box-shadow: 16px 40px 0 -10px white;
     opacity: 0.8;
     transition-duration: 10s;

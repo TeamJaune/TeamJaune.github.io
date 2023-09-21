@@ -1,5 +1,7 @@
 const bubbles = document.querySelectorAll('.bubble');
 const bubbleMove = document.querySelectorAll('.bubble-move');
+const cursor = document.querySelector('.cursor');
+let bubbleDirection = {};
 
 // Place the bubbles in the center of the screen
 function placeBubbles() {
@@ -12,6 +14,7 @@ function placeBubbles() {
         // bubble position
         bubble.style.left = window.innerWidth / 2 - size.width / 2 + 'px';
         bubble.style.top = window.innerHeight / 2 - size.height / 2 + 'px';
+        resetBubbleDirection(bubble);
 
         // set bubble speed to 5
         bubble.dataset.speedx = 2;
@@ -19,7 +22,7 @@ function placeBubbles() {
         // set timout to reset speed to default
         setTimeout(() => {
             setRandomSpeed(bubble);
-        }, 1000);
+        }, 250);
     });
 }
 
@@ -127,8 +130,8 @@ function moveBubbles() {
 
             // test if the bubble is out of the screen
             if (
-                newPosition.x < 0 + window.innerWidth / 10 || 
-                newPosition.x > window.innerWidth - (size.width + window.innerWidth / 10)
+                newPosition.x < 0 + window.innerWidth / 15 || 
+                newPosition.x > window.innerWidth - (size.width + window.innerWidth / 15)
             ) {
                 // if so, change the direction
                 bubble.dataset.directionx = -direction.x;
@@ -137,8 +140,8 @@ function moveBubbles() {
             }
 
             if (
-                newPosition.y < 0 + window.innerHeight / 10 ||
-                newPosition.y > window.innerHeight - (size.height + window.innerHeight / 10)
+                newPosition.y < 0 + window.innerHeight / 15 ||
+                newPosition.y > window.innerHeight - (size.height + window.innerHeight / 15)
             ) {
                 // if so, change the direction
                 bubble.dataset.directiony = -direction.y;
@@ -157,6 +160,20 @@ function moveBubbles() {
 
     // call the animation frame
     requestAnimationFrame(moveBubbles);
+}
+
+// store default direction for each bubble
+bubbleMove.forEach(bubble => {
+    bubbleDirection[bubble.dataset.id] = {
+        x: parseFloat(bubble.dataset.directionx),
+        y: parseFloat(bubble.dataset.directiony)
+    };
+});
+
+// reset bubble direction to default
+function resetBubbleDirection(bubble) {
+    bubble.dataset.directionx = bubbleDirection[bubble.dataset.id].x;
+    bubble.dataset.directiony = bubbleDirection[bubble.dataset.id].y;
 }
 
 // call the randomMorph function every 1 second
