@@ -3,6 +3,7 @@ const yellowTeam = document.getElementById("yellow");
 const redTeam = document.getElementById("red");
 const versus = document.getElementById("versus");
 const links = document.querySelectorAll("a");
+let swap = true;
 let degree = 0;
 const amplitude = 25;
 const period = 1000;
@@ -15,6 +16,9 @@ const linkTimer = 1000;
 // get css properties on :root element called yellow
 const root = document.querySelector(':root');
 const yellow = getComputedStyle(root).getPropertyValue('--yellow');
+
+// get css properties on :root element called red
+const red = getComputedStyle(root).getPropertyValue('--red');
 
 // set canvas width and height
 canvas.width = window.innerWidth;
@@ -35,18 +39,22 @@ yellowTeam.addEventListener("click", () => {
     yellowTeam.classList.add("activeYellow");
 });
 
-redTeam.addEventListener("click", () => {
-    commingFrom = "red";
-    yellowTeam.classList.add("remove");
-    versus.classList.add("remove");
-    redTeam.classList.add("activeRed");
-});
-
 // canvas resize listener
 window.addEventListener("resize", debounce(() => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }));
+
+redTeam.addEventListener("mouseenter", () => {
+    swap = !swap;
+    yellowTeam.classList.toggle("red");
+    yellowTeam.classList.toggle("yellow");
+    yellowTeam.classList.toggle("flip");
+    redTeam.classList.toggle("yellow");
+    redTeam.classList.toggle("red");
+    redTeam.classList.toggle("flip");
+    document.body.classList.toggle("swap")
+})
 
 // links listener
 links.forEach(link => {
@@ -64,7 +72,7 @@ if (canvas.getContext) {
 
     function drawWave() {
 
-        ctx.fillStyle = yellow;
+        ctx.fillStyle = swap ? yellow : red;
         ctx.strokeStyle = "#202020";
         if (commingFrom !== null) {
             commingFromAnimation += 1 * commingFromSpeed;

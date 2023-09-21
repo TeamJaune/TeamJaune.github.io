@@ -9,6 +9,10 @@ body {
     background-color: var(--red);
 }
 
+body.swap {
+    background-color: var(--yellow);
+}
+
 img.versus {
     position: absolute;
     display: block;
@@ -26,6 +30,15 @@ img.versus {
     }
     100% {
         transform: translate(-50%, -50%) scale(1.2) rotate(20deg);
+    }
+}
+
+@keyframes versusAnimationFliped {
+    0% {
+        transform: translate(-50%, -50%) scale(1) rotate(15deg) scaleX(-1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.2) rotate(20deg) scaleX(-1);
     }
 }
 
@@ -88,6 +101,10 @@ img.red:hover {
     transform: translate(-50%, -50%) rotate(0deg) scale(1.2)!important;
     height: 35vh!important;
     aspect-ratio: 1/1!important;
+}
+
+.flip {
+    animation: versusAnimationFliped 1s alternate-reverse infinite!important;
 }
 
 @media screen and (max-width: 1000px) {
