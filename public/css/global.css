@@ -1,0 +1,13 @@
+:root {
+    --yellow: #fdd61d;
+    --red: #ff5757;
+    --text: #202020;
+    --background: #EEEEEE;
+}
+
+* {
+    padding: 0px;
+    margin: 0px;
+    font-size: 17px;
+    color: var(--text);
+}

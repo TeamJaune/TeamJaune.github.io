@@ -1,0 +1,159 @@
+canvas {
+    position: absolute;
+    display: block;
+    height: 100vh;
+    width: 100vw;
+}
+
+body {
+    background-color: var(--red);
+}
+
+img.versus {
+    position: absolute;
+    display: block;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    height: 35vh;
+    aspect-ratio: 1/1;
+    transition-duration: 0.3s;
+}
+
+@keyframes versusAnimation {
+    0% {
+        transform: translate(-50%, -50%) scale(1) rotate(15deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.2) rotate(20deg);
+    }
+}
+
+img.yellow {
+    position: absolute;
+    display: block;
+    top: 30vh;
+    left: 25vw;
+    transform: translate(-50%, -50%) rotate(20deg);
+    height: 25vh;
+    aspect-ratio: 1/1;
+    transition-duration: 0.3s;
+    cursor: pointer;
+    cursor: pointer;
+    animation: versusAnimation 1s alternate-reverse infinite;
+    border: 0px solid transparent;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+img.yellow:hover {
+    border: 5px solid var(--text);
+}
+
+img.red {
+    position: absolute;
+    display: block;
+    top: 70vh;
+    left: 80vw;
+    transform: translate(-50%, -50%) rotate(20deg);
+    height: 25vh;
+    aspect-ratio: 1/1;
+    transition-duration: 0.3s;
+    cursor: pointer;
+    animation: versusAnimation 1s alternate-reverse infinite;
+    animation-delay: 0.5s;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+img.red:hover {
+    border: 5px solid var(--text);
+}
+
+.remove {
+    opacity: 0;
+}
+
+.activeRed {
+    top: 50vh!important;
+    right: 50vw!important;
+    transform: translate(50%, -50%) rotate(0deg) scale(1.2)!important;
+    height: 35vh!important;
+    aspect-ratio: 1/1!important;
+}
+
+.activeYellow {
+    top: 50vh!important;
+    left: 50vw!important;
+    transform: translate(-50%, -50%) rotate(0deg) scale(1.2)!important;
+    height: 35vh!important;
+    aspect-ratio: 1/1!important;
+}
+
+@media screen and (max-width: 1000px) {
+    img.versus {
+        height: 20vh;
+    }
+
+    img.yellow {
+        height: 20vh;
+        transform: translate(-50%, -50%) rotate(30deg);
+    }
+
+    img.red {
+        height: 20vh;
+        transform: translate(-50%, -50%) rotate(30deg);
+    }
+
+    img.yellow:hover {
+        transform: translate(-50%, -50%) rotate(30deg) scale(1.2);
+    }
+
+    img.red:hover {
+        transform: translate(-50%, -50%) rotate(30deg) scale(1.2);
+    }
+
+    @keyframes versusAnimation {
+        0% {
+            transform: translate(-50%, -50%) scale(1) rotate(30deg);
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(1.2) rotate(35deg);
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    img.versus {
+        height: 20vh;
+    }
+
+    img.yellow {
+        height: 15vh;
+        transform: translate(-50%, -50%) rotate(60deg);
+        top: 20vh;
+    }
+
+    img.red {
+        height: 15vh;
+        transform: translate(-50%, -50%) rotate(60deg);
+        top: 80vh;
+    }
+
+    img.yellow:hover {
+        transform: translate(-50%, -50%) rotate(60deg) scale(1.2);
+    }
+
+    img.red:hover {
+        transform: translate(-50%, -50%) rotate(60deg) scale(1.2);
+    }
+
+    @keyframes versusAnimation {
+        0% {
+            transform: translate(-50%, -50%) scale(1) rotate(60deg);
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(1.2) rotate(65deg);
+        }
+    }
+}
