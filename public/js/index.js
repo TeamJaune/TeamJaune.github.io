@@ -1,29 +1,31 @@
-const canvas = document.getElementById("wave");
-const yellowTeam = document.getElementById("yellow");
-const redTeam = document.getElementById("red");
-const versus = document.getElementById("versus");
+// Selecting DOM elements
+const canvas = document.getElementById("waveCanvas");
+const yellowTeamButton = document.getElementById("yellowTeamButton");
+const redTeamButton = document.getElementById("redTeamButton");
+const versusElement = document.getElementById("versus");
 const links = document.querySelectorAll("a");
-let swap = true;
+let isYellowTeamActive = true;
+
+// wave variables
 let degree = 0;
 const amplitude = 25;
 const period = 1000;
 const speed = 2;
-let commingFrom = null;
-let commingFromAnimation = 0;
-const commingFromSpeed = 15;
-const linkTimer = 1000;
+let waveDirection = null; // Animation direction of the wave (null means no animation)
+let waveAnimationOffset = 0; // Wave animation offset
+const waveAnimationSpeed = 15; // Wave animation speed
+const linkClickDelay = 1000; // Delay for link click
 
-// get css properties on :root element called yellow
+// Getting CSS values for yellow and red colors from :root
 const root = document.querySelector(':root');
-const yellow = getComputedStyle(root).getPropertyValue('--yellow');
+const yellowColor = getComputedStyle(root).getPropertyValue('--yellow');
+const redColor = getComputedStyle(root).getPropertyValue('--red');
 
-// get css properties on :root element called red
-const red = getComputedStyle(root).getPropertyValue('--red');
-
-// set canvas width and height
+// Setting canvas width and height
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// Debounce function to reduce the frequency of resize function calls
 function debounce(func, timeout = 300){
     let timer;
     return (...args) => {
@@ -32,96 +34,100 @@ function debounce(func, timeout = 300){
     };
 }
 
-yellowTeam.addEventListener("click", () => {
-    commingFrom = swap ? "yellow" : "red";
-    redTeam.classList.add("remove");
-    versus.classList.add("remove");
-    yellowTeam.classList.add("activeYellow");
+// Click handler for yellow team button
+yellowTeamButton.addEventListener("click", () => {
+    // Update animation direction and add CSS classes
+    waveDirection = isYellowTeamActive ? "yellow" : "red";
+    redTeamButton.classList.add("remove");
+    versusElement.classList.add("remove");
+    yellowTeamButton.classList.add("activeYellow");
 });
 
-// canvas resize listener
+// Resize handler for the canvas
 window.addEventListener("resize", debounce(() => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }));
 
-redTeam.addEventListener("mouseenter", () => {
-    swap = !swap;
-    yellowTeam.classList.toggle("red");
-    yellowTeam.classList.toggle("yellow");
-    yellowTeam.classList.toggle("flip");
-    redTeam.classList.toggle("yellow");
-    redTeam.classList.toggle("red");
-    redTeam.classList.toggle("flip");
-    document.body.classList.toggle("swap")
-})
+// Mouseenter handler for the red team button
+redTeamButton.addEventListener("mouseenter", () => {
+    // Toggle active team and update CSS classes
+    isYellowTeamActive = !isYellowTeamActive;
+    yellowTeamButton.classList.toggle("red");
+    yellowTeamButton.classList.toggle("yellow");
+    yellowTeamButton.classList.toggle("flip");
+    redTeamButton.classList.toggle("yellow");
+    redTeamButton.classList.toggle("red");
+    redTeamButton.classList.toggle("flip");
+    document.body.classList.toggle("swap");
+});
 
-// links listener
+// Click handlers for the links
 links.forEach(link => {
     link.addEventListener("click", (e) => {
         e.preventDefault();
         setTimeout(() => {
-            // go to the link
+            // Redirect to the link after a delay
             window.location.href = link.href;
-        }, linkTimer);
+        }, linkClickDelay);
     });
 });
 
 if (canvas.getContext) {
     let ctx = canvas.getContext('2d');
 
+    // Function to draw the wave
     function drawWave() {
-
-        ctx.fillStyle = swap ? yellow : red;
+        ctx.fillStyle = isYellowTeamActive ? yellowColor : redColor;
         ctx.strokeStyle = "#202020";
-        if (commingFrom !== null) {
-            commingFromAnimation += 1 * commingFromSpeed;
+        
+        // Animation of the wave origin
+        if (waveDirection !== null) {
+            waveAnimationOffset += 1 * waveAnimationSpeed;
         }
 
-        // calculates the slope of the curve
-        let pante = canvas.height / canvas.width;
+        // Calculating the slope of the curve
+        let slope = canvas.height / canvas.width;
 
-        // clear canvas
+        // Clear the canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         ctx.beginPath();
-        // make a triangle
         ctx.moveTo(canvas.width, 0);
         ctx.lineTo(0, 0);
         ctx.lineTo(0, canvas.height);
-        for (let x = 0, panteAdd = 0; x <= canvas.width; x++, panteAdd += pante) {
-            // calc the courbe of sinus for the wave
+
+        for (let x = 0, slopeAdd = 0; x <= canvas.width; x++, slopeAdd += slope) {
             let y = -amplitude * Math.sin((Math.PI / period) * (degree + x));
-            if (commingFrom == "yellow") {
-                ctx.lineTo(x, y + canvas.height - panteAdd + commingFromAnimation);
-            } else if (commingFrom == "red") {
-                ctx.lineTo(x, y + canvas.height - panteAdd - commingFromAnimation);
+            if (waveDirection == "yellow") {
+                ctx.lineTo(x, y + canvas.height - slopeAdd + waveAnimationOffset);
+            } else if (waveDirection == "red") {
+                ctx.lineTo(x, y + canvas.height - slopeAdd - waveAnimationOffset);
             } else {
-                ctx.lineTo(x, y + canvas.height - panteAdd);
+                ctx.lineTo(x, y + canvas.height - slopeAdd);
             }
         }
+
         ctx.fill();
         ctx.closePath();
 
-        // draw line on hypotenuse
         ctx.beginPath();
-        for (let x = 0, panteAdd = 0; x <= canvas.width; x++, panteAdd += pante) {
-            // calc the courbe of sinus for the wave
+
+        for (let x = 0, slopeAdd = 0; x <= canvas.width; x++, slopeAdd += slope) {
             let y = -amplitude * Math.sin((Math.PI / period) * (degree + x));
-            // draw line on hypotenuse
-            // ctx.rect(x, y + canvas.height - panteAdd, 10, 10);
-            if (commingFrom == "yellow") {
-                ctx.rect(x, y + canvas.height - panteAdd + commingFromAnimation, 10, 10);
-            } else if (commingFrom == "red") {
-                ctx.rect(x, y + canvas.height - panteAdd - commingFromAnimation, 10, 10);
+            if (waveDirection == "yellow") {
+                ctx.rect(x, y + canvas.height - slopeAdd + waveAnimationOffset, 10, 10);
+            } else if (waveDirection == "red") {
+                ctx.rect(x, y + canvas.height - slopeAdd - waveAnimationOffset, 10, 10);
             } else {
-                ctx.rect(x, y + canvas.height - panteAdd, 10, 10);
+                ctx.rect(x, y + canvas.height - slopeAdd, 10, 10);
             }
         }
+
         ctx.stroke();
         ctx.closePath();
 
-        // reset memory
+        // Resetting the angle
         if (degree == 2000) {
             degree = 0;
         }
@@ -129,6 +135,6 @@ if (canvas.getContext) {
         window.requestAnimationFrame(drawWave);
     }
 
+    // Initial call to the draw function
     drawWave();
-
 }
