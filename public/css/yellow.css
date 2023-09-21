@@ -12,13 +12,20 @@ body {
     }
 }
 
-div.bubble {
+div.bubble-move {
     position: absolute;
+    display: block;
+    height: 30vh;
+    aspect-ratio: 1/1;
+}
+
+div.bubble {
+    position: relative;
     display: block;
     background-color: var(--yellow);
     border-radius: 51% 49% 48% 52% / 62% 44% 56% 38%;
-    height: 25vh;
-    aspect-ratio: 1/1;
+    height: 100%;
+    width: 100%;
     transition-duration: 2.5s;
 }
 
@@ -26,10 +33,12 @@ div.bubble:hover {
     transform: scale(1.5)!important;
     cursor: pointer;
     z-index: 9999;
+    transition-duration: 0.3s!important;
 }
 
 div.bubble:hover span.filter {
     opacity: 0!important;
+    transition-duration: 0.3s!important;
 }
 
 div.bubble img {
