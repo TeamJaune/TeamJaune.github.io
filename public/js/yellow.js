@@ -117,8 +117,8 @@ function spawnCheck() {
         spawnTurtles();
         if (Math.random() > 0.5) spawnTurtles();
     }
-    if (time % 13694 == 5555) spawnBeluga();
-    if (time == 10000) spawnTotem();
+    if (time % 10000 == 2000) spawnBeluga();
+    if (time % 8500 == 1500) spawnTotem();
 }
 
 // spawns the sunRays
