@@ -35,6 +35,11 @@ function animateBackground() {
     drawSunRays();
     drawGradientTransparent();
 
+    if (time < 360) {
+        context.fillStyle = 'rgba(253, 214, 29, ' + (1 - ((time / 360))) + ')';
+        context.fillRect(0, 0, width, height);
+    }
+
     time++;
     requestAnimationFrame(animateBackground);
 }
