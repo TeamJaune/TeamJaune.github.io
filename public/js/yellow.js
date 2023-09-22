@@ -2,7 +2,10 @@ const bubbles = document.querySelectorAll('.bubble');
 const bubbleMove = document.querySelectorAll('.bubble-move');
 const cursor = document.querySelector('.cursor');
 const background = document.getElementById('background');
+const popup = document.querySelector(".popup")
 const context = background.getContext('2d');
+let popUpText = null;
+let popUpOpen = false;
 const totemImg = new Image();
 totemImg.src = '../public/images/totem.png';
 const width = 1920;
@@ -251,6 +254,24 @@ bubbles.forEach(bubble => {
         bubble.dataset.hovered = "false";
     });
 });
+
+bubbleMove.forEach(bubble => {
+    bubble.addEventListener("click", () => {
+        let id = bubble.dataset.id;
+        popUpText = document.getElementById(id);
+        popup.style.display = "block";
+        popUpText.style.display = "block";
+        popUpOpen = true;
+    });
+})
+
+popup.addEventListener("click", () => {
+    if (popUpOpen) {
+        popUpText.style.display = "none";
+        popup.style.display = "none";
+        popUpOpen = false;
+    }
+})
 
 function setRandomSpeed(bubble) {
     // set a random speed between 0.2 and 0.4
