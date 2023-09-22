@@ -1,16 +1,180 @@
 const bubbles = document.querySelectorAll('.bubble');
 const bubbleMove = document.querySelectorAll('.bubble-move');
 const cursor = document.querySelector('.cursor');
+const background = document.getElementById('background');
+const context = background.getContext('2d');
+const totemImg = new Image();
+totemImg.src = '../public/images/totem.png';
+const width = 1920;
+const height = 1080;
+const nbFish = 200;
+background.width = width;
+background.height = height;
+let mouseX;
+let mouseY;
+let backBubbles = [];
+let backFishes = [];
+let backTurtles = [];
+let backBelugas = [];
+const sunRays = [];
+let totem = null;
+let time = 0;
 let bubbleDirection = {};
+
+// background animations
+function animateBackground() {
+    // animation
+    spawnCheck();
+    context.clearRect(0, 0, width, height);
+    drawGradient();
+    drawBelugas();
+    drawFishes();
+    drawTurtles();
+    drawBubbles();
+    drawTotem();
+    drawSunRays();
+    drawGradientTransparent();
+
+    time++;
+    requestAnimationFrame(animateBackground);
+}
+
+// draws and update the totem
+function drawTotem() {
+    if (totem == null) return;
+    totem.update();
+    totem.draw(context);
+    if (totem.finished) totem = null;
+}
+
+// draws and update background turtles
+function drawTurtles() {
+    backTurtles = backTurtles.filter(tur => !tur.finished);
+    backTurtles.forEach((tur) => {
+        tur.update();
+        tur.draw(context);
+    });
+}
+
+//draws and update background fishes
+function drawFishes() {
+    let target = new Vector(mouseX, mouseY);
+    backFishes.forEach((fis) => {
+        fis.update();
+        fis.draw(context);
+    });
+}
+
+// draws and update background belugas
+function drawBelugas() {
+    backBelugas = backBelugas.filter(bel => !bel.finished);
+    backBelugas.forEach((bel) => {
+        bel.update();
+        bel.draw(context);
+    });
+}
+
+// draws and update background bubbles
+function drawBubbles() {
+    backBubbles = backBubbles.filter(bub => !bub.finished);
+    backBubbles.forEach((bub) => {
+        bub.update();
+        bub.draw(context);
+    });
+}
+
+// draws the background gradient
+function drawGradient() {
+    const gradient = context.createLinearGradient(0, 0, width / 3, height * 1.8);
+    gradient.addColorStop(0, '#0088FF');
+    gradient.addColorStop(1, '#000022');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, width, height);
+}
+
+// draws the transparent gradient
+function drawGradientTransparent() {
+    const gradient = context.createLinearGradient(0, 0, width / 3, height * 1.8);
+    gradient.addColorStop(0, '#0088FF50');
+    gradient.addColorStop(1, '#000022FF');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, width, height);
+}
+
+// draws and update the sunrays
+function drawSunRays() {
+    sunRays.forEach((sunRay) => {
+        sunRay.update();
+        sunRay.draw(context);
+    });
+}
+
+// spawns new animals
+function spawnCheck() {
+    if (time == 0) spawnFishes();
+    if (time % 1849 == 600) spawnBubbles();
+    if (time % 3447 == 0) {
+        spawnTurtles();
+        if (Math.random() > 0.5) spawnTurtles();
+    }
+    if (time % 13694 == 5555) spawnBeluga();
+    if (time == 10000) spawnTotem();
+}
+
+// spawns the sunRays
+function spawnSunRay() {
+    sunRays.push(new Sunray(50, -50, 120));
+    sunRays.push(new Sunray(180, -50, 40));
+    sunRays.push(new Sunray(240, -50, 10));
+    sunRays.push(new Sunray(30, -50, 15));
+}
+
+// spawns a pack of turtles
+function spawnTurtles() {
+    let number = Math.round(Math.random() * 7);
+    let y = Math.round(Math.random() * height / 2 + height / 4);
+    let direction = Math.random() > 0.5 ? 1 : -1;
+    for (let i = 0; i < number; i++) {
+        backTurtles.push(new Turtle(-400 * direction - i * 50 + (direction == -1 ? width : 0), y + i * 50, direction));
+    }
+}
+
+// spawns a beluga
+function spawnBeluga() {
+    let y = Math.round(Math.random() * height / 2 + height / 4);
+    backBelugas.push(new Beluga(-200, y));
+}
+
+// spawns a totem
+function spawnTotem() {
+    let x = Math.round(Math.random() * width / 2 + width / 4);
+    totem = new Totem(x, -100);
+}
+
+// spawns a pack of bubbles
+function spawnBubbles() {
+    let number = Math.round(Math.random() * 150);
+    let x = Math.round(Math.random() * width);
+    for (let i = 0; i < number; i++) {
+        backBubbles.push(new Bubble(x + Math.random() * 100, height + 200 + Math.random() * 1000));
+    }
+}
+
+// spawns a pack of fishes
+function spawnFishes() {
+    for (let i = 0; i < nbFish; i++) {
+        backFishes.push(new Fish(Math.random() * width * 2 - width, Math.random() * height * 2 - height));
+    }
+}
 
 // Place the bubbles in the center of the screen
 function placeBubbles() {
     bubbleMove.forEach(bubble => {
-    // bubble size
-    const size = {
-        width: bubble.offsetWidth,
-        height: bubble.offsetHeight
-    };
+        // bubble size
+        const size = {
+            width: bubble.offsetWidth,
+            height: bubble.offsetHeight
+        };
         // bubble position
         bubble.style.left = window.innerWidth / 2 - size.width / 2 + 'px';
         bubble.style.top = window.innerHeight / 2 - size.height / 2 + 'px';
@@ -27,11 +191,11 @@ function placeBubbles() {
 }
 
 // Debounce function to reduce the frequency of resize function calls
-function debounce(func, timeout = 300){
+function debounce(func, timeout = 300) {
     let timer;
     return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
     };
 }
 
@@ -130,7 +294,7 @@ function moveBubbles() {
 
             // test if the bubble is out of the screen
             if (
-                newPosition.x < 0 + window.innerWidth / 15 || 
+                newPosition.x < 0 + window.innerWidth / 15 ||
                 newPosition.x > window.innerWidth - (size.width + window.innerWidth / 15)
             ) {
                 // if so, change the direction
@@ -197,3 +361,9 @@ placeBubbles();
 
 // call the animation frame
 moveBubbles();
+
+// spawn sunRays
+spawnSunRay();
+
+// start background animation
+animateBackground()
