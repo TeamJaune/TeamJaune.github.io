@@ -123,15 +123,25 @@ div.yellow-circle {
     background-color: var(--yellow);
     text-align: center;
 }
-div.yellow-circle p{
+
+div.yellow-circle img {
+    display: block;
+    position: relative;
+    height: 40vh;
+    aspect-ratio: 1/1;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+div.yellow-circle p {
     display: block;
     position: relative;
     max-width: 75%;
     left: 50%;
     transform: translateX(-50%);
 }
-div.yellow-circle h1{
-    font-size: 50px;
+div.yellow-circle h1 {
+    font-size: calc(5vh + 15px);
 }
 div.yellow-circle div {
     display: none;
